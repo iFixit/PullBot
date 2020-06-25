@@ -16,13 +16,18 @@ set :port, config['port']
 opened_uri = URI(config['slack']['webhooks']['opened'])
 merged_uri = URI(config['slack']['webhooks']['merged'])
 
+# PR Icon URIs
+$pr_icon_opened_uri = config['slack']['images']['opened']
+$pr_icon_merged_uri = config['slack']['images']['merged']
+
+
 helpers do
      def verify_signature(payload_body, signature_from_header)
           signature = 'sha1=' + OpenSSL::HMAC.hexdigest(OpenSSL::Digest::SHA1.new, $gh_secret, payload_body)
           return halt 500, "Signatures didn't match!" unless Rack::Utils.secure_compare(signature, signature_from_header)
      end
 
-     def make_merged_json(repo_meta, pr, author_meta, action, sender_meta)
+     def make_merged_json(repo_meta, pr, author_meta, action, sender_meta, pr_icon_uri)
           j = { 
                "blocks" => [
                     { 
@@ -31,6 +36,11 @@ helpers do
                               "type" => "mrkdwn",
                               "text" => "<#{repo_meta['html_url']}|#{repo_meta['full_name']}>"\
                                         " <#{pr['html_url']}|#{pr['title']} ##{pr['number']}>"
+                         },
+                         "accessory" => {
+                              "type" => "image",
+                              "image_url" => "#{pr_icon_uri}",
+                              "alt_text" => "#{action}"
                          }
                     },
                     {
@@ -90,11 +100,13 @@ post '/payload' do
 
      # PR opened
      if action == 'opened'
+          icon_uri = $pr_icon_opened_uri
           notify_json opened_uri,
                make_merged_json(repo_meta, pr, author_meta, action, sender_meta)
      # PR merged
      elsif (action == 'closed') && merged
           action = "merged"
+          icon_uri = $pr_icon_merged_uri
           notify_json merged_uri,
                make_merged_json(repo_meta, pr, author_meta, action, sender_meta)
      # PR closed without merging
