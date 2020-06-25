@@ -92,6 +92,7 @@ post '/payload' do
      
      # Get the PR details
      pr = body['pull_request']
+     state = pr['state']
      merged =  pr['merged']
 
      pr_link = pr['html_url']
@@ -105,6 +106,13 @@ post '/payload' do
           notify_json opened_uri,
                make_json(repo_meta, pr, author_meta, action, sender_meta, icon_uri)
           'Opened PR message receieved'
+     # PR re-opened
+     elsif action == 'reopened'
+          action = 'reopened'
+          icon_uri = $pr_icon_opened_uri
+          notify_json opened_uri,
+               make_json(repo_meta, pr, author_meta, action, sender_meta, icon_uri)
+          'Reopened PR message receieved'
      # PR merged
      elsif (action == 'closed') && merged
           action = "merged"
