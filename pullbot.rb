@@ -92,16 +92,18 @@ post '/payload' do
      if action == 'opened'
           notify_json opened_uri,
                make_merged_json(repo_meta, pr, author_meta, action, sender_meta)
+          'Opened PR message receieved'
      # PR merged
      elsif (action == 'closed') && merged
           action = "merged"
           notify_json merged_uri,
                make_merged_json(repo_meta, pr, author_meta, action, sender_meta)
+          'Merged PR message receieved'
      # PR closed without merging
      elsif (action == 'closed') && !merged
           notify_json opened_uri,
                make_merged_json(repo_meta, pr, author_meta, action, sender_meta)
+          'Closed PR message receieved'
      end
-     'Payload receieved'
 end
 
