@@ -58,7 +58,6 @@ helpers do
                     }
                ]
           }
-          puts j.to_json
           j.to_json
      end
 
