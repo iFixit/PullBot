@@ -1,5 +1,5 @@
 {
-   "port": <port number for service>,
+   "port": 55555,
    "github": {
       "secret": "<GitHub webhook secret>"
    },
