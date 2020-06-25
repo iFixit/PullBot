@@ -11,3 +11,4 @@ RUN bundle install
 COPY . .
 
 CMD ["ruby", "pullbot.rb"]
+
