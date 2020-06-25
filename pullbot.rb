@@ -92,7 +92,6 @@ post '/payload' do
      
      # Get the PR details
      pr = body['pull_request']
-     state = pr['state']
      merged =  pr['merged']
 
      pr_link = pr['html_url']
