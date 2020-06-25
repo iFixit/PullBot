@@ -1,5 +1,5 @@
 #!/bin/bash
 
 docker rm -f pullbot
-bash run.sh
+bash exec/run.sh
 
