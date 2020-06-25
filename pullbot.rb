@@ -29,7 +29,7 @@ helpers do
           return halt 500, "Signatures didn't match!" unless Rack::Utils.secure_compare(signature, signature_from_header)
      end
 
-     def make_merged_json(repo_meta, pr, author_meta, action, sender_meta, pr_icon_uri)
+     def make_json(repo_meta, pr, author_meta, action, sender_meta, pr_icon_uri)
           j = { 
                "blocks" => [
                     { 
@@ -103,22 +103,21 @@ post '/payload' do
      if action == 'opened'
           icon_uri = $pr_icon_opened_uri
           notify_json opened_uri,
-               make_merged_json(repo_meta, pr, author_meta, action, sender_meta, icon_uri)
+               make_json(repo_meta, pr, author_meta, action, sender_meta, icon_uri)
           'Opened PR message receieved'
-
      # PR merged
      elsif (action == 'closed') && merged
           action = "merged"
           icon_uri = $pr_icon_merged_uri
           notify_json merged_uri,
-                      make_merged_json(repo_meta, pr, author_meta, action, sender_meta, icon_uri)
+               make_json(repo_meta, pr, author_meta, action, sender_meta, icon_uri)
           'Merged PR message receieved'
      # PR closed without merging
      elsif (action == 'closed') && !merged
           action = "closed without merge"
           icon_uri = $pr_icon_closed_uri
           notify_json closed_uri,
-               make_merged_json(repo_meta, pr, author_meta, action, sender_meta, icon_uri)
+               make_json(repo_meta, pr, author_meta, action, sender_meta, icon_uri)
           'Closed PR message receieved'
      end
 end
