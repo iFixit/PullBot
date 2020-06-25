@@ -13,8 +13,15 @@ $gh_secret = config['github']['secret']
 set :port, config['port']
 
 # Slack webhook URIs
+closed_uri = URI(config['slack']['webhooks']['closed'])
 opened_uri = URI(config['slack']['webhooks']['opened'])
 merged_uri = URI(config['slack']['webhooks']['merged'])
+
+# PR Icon URIs
+$pr_icon_closed_uri = config['slack']['images']['closed']
+$pr_icon_opened_uri = config['slack']['images']['opened']
+$pr_icon_merged_uri = config['slack']['images']['merged']
+
 
 helpers do
      def verify_signature(payload_body, signature_from_header)
@@ -22,7 +29,7 @@ helpers do
           return halt 500, "Signatures didn't match!" unless Rack::Utils.secure_compare(signature, signature_from_header)
      end
 
-     def make_merged_json(repo_meta, pr, author_meta, action, sender_meta)
+     def make_json(repo_meta, pr, author_meta, action, sender_meta, pr_icon_uri)
           j = { 
                "blocks" => [
                     { 
@@ -53,6 +60,11 @@ helpers do
                               {
                                    "type" => "mrkdwn",
                                    "text" => " #{action} by <#{sender_meta['html_url']}|#{sender_meta['login']}>"
+                              },
+                              {
+                                   "type" => "image",
+                                   "image_url" => "#{pr_icon_uri}",
+                                   "alt_text" => "#{action}"
                               }
                          ]
                     }
@@ -89,19 +101,23 @@ post '/payload' do
 
      # PR opened
      if action == 'opened'
+          icon_uri = $pr_icon_opened_uri
           notify_json opened_uri,
-               make_merged_json(repo_meta, pr, author_meta, action, sender_meta)
+               make_json(repo_meta, pr, author_meta, action, sender_meta, icon_uri)
           'Opened PR message receieved'
      # PR merged
      elsif (action == 'closed') && merged
           action = "merged"
+          icon_uri = $pr_icon_merged_uri
           notify_json merged_uri,
-               make_merged_json(repo_meta, pr, author_meta, action, sender_meta)
+               make_json(repo_meta, pr, author_meta, action, sender_meta, icon_uri)
           'Merged PR message receieved'
      # PR closed without merging
      elsif (action == 'closed') && !merged
-          notify_json opened_uri,
-               make_merged_json(repo_meta, pr, author_meta, action, sender_meta)
+          action = "closed without merge"
+          icon_uri = $pr_icon_closed_uri
+          notify_json closed_uri,
+               make_json(repo_meta, pr, author_meta, action, sender_meta, icon_uri)
           'Closed PR message receieved'
      end
 end
