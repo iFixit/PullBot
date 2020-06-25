@@ -52,7 +52,7 @@ helpers do
                               },
                               {
                                    "type" => "mrkdwn",
-                                   "text" => " merged by <#{sender_meta['html_url']}|#{sender_meta['login']}>"
+                                   "text" => " #{action} by <#{sender_meta['html_url']}|#{sender_meta['login']}>"
                               }
                          ]
                     }
