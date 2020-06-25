@@ -13,6 +13,7 @@ $gh_secret = config['github']['secret']
 set :port, config['port']
 
 # Slack webhook URIs
+closed_uri = URI(config['slack']['webhooks']['closed'])
 opened_uri = URI(config['slack']['webhooks']['opened'])
 merged_uri = URI(config['slack']['webhooks']['merged'])
 
@@ -112,8 +113,9 @@ post '/payload' do
                make_merged_json(repo_meta, pr, author_meta, action, sender_meta, icon_uri)
      # PR closed without merging
      elsif (action == 'closed') && !merged
+          action = "closed without merge"
           icon_uri = $pr_icon_closed_uri
-          notify_json opened_uri,
+          notify_json closed_uri,
                make_merged_json(repo_meta, pr, author_meta, action, sender_meta, icon_uri)
      end
      'Payload receieved'
