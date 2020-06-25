@@ -1,3 +1,3 @@
 # Pullbot
 
-More info coming soon.
+More info to be added.
