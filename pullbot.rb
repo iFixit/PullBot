@@ -17,6 +17,7 @@ opened_uri = URI(config['slack']['webhooks']['opened'])
 merged_uri = URI(config['slack']['webhooks']['merged'])
 
 # PR Icon URIs
+$pr_icon_closed_uri = config['slack']['images']['closed']
 $pr_icon_opened_uri = config['slack']['images']['opened']
 $pr_icon_merged_uri = config['slack']['images']['merged']
 
@@ -102,17 +103,18 @@ post '/payload' do
      if action == 'opened'
           icon_uri = $pr_icon_opened_uri
           notify_json opened_uri,
-               make_merged_json(repo_meta, pr, author_meta, action, sender_meta)
+               make_merged_json(repo_meta, pr, author_meta, action, sender_meta, icon_uri)
      # PR merged
      elsif (action == 'closed') && merged
           action = "merged"
           icon_uri = $pr_icon_merged_uri
           notify_json merged_uri,
-               make_merged_json(repo_meta, pr, author_meta, action, sender_meta)
+               make_merged_json(repo_meta, pr, author_meta, action, sender_meta, icon_uri)
      # PR closed without merging
      elsif (action == 'closed') && !merged
+          icon_uri = $pr_icon_closed_uri
           notify_json opened_uri,
-               make_merged_json(repo_meta, pr, author_meta, action, sender_meta)
+               make_merged_json(repo_meta, pr, author_meta, action, sender_meta, icon_uri)
      end
      'Payload receieved'
 end
