@@ -18,22 +18,55 @@ merged_uri = URI(config['slack']['webhooks']['merged'])
 
 helpers do
      def verify_signature(payload_body, signature_from_header)
-          puts $gh_secret
-          puts 
           signature = 'sha1=' + OpenSSL::HMAC.hexdigest(OpenSSL::Digest::SHA1.new, $gh_secret, payload_body)
           return halt 500, "Signatures didn't match!" unless Rack::Utils.secure_compare(signature, signature_from_header)
      end
 
-     def make_json(repo, number, author, action, sender, emoji)
-          { "text" =>
-            "PR #{number} of #{repo} by #{author} #{action} by #{sender} :#{emoji}:"
-          }.to_json
+     def make_merged_json(repo_meta, pr, author_meta, action, sender_meta)
+          j = { 
+               "blocks" => [
+                    { 
+                         "type" => "section",
+                         "text" => {
+                              "type" => "mrkdwn",
+                              "text" => "<#{repo_meta['html_url']}|#{repo_meta['full_name']}>"\
+                                        " <#{pr['html_url']}|#{pr['title']} ##{pr['number']}>"
+                         }
+                    },
+                    {
+                         "type" => "context",
+                         "elements" => [
+                              {
+                                   "type" => "image",
+                                   "image_url" => author_meta['avatar_url'],
+                                   "alt_text" => author_meta['login']
+                              },
+                              {
+                                   "type" => "mrkdwn",
+                                   "text" => "by <#{author_meta['html_url']}|#{author_meta['login']}>"
+                              },
+                              {
+                                   "type" => "image",
+                                   "image_url" => sender_meta['avatar_url'],
+                                   "alt_text" => sender_meta['login']
+                              },
+                              {
+                                   "type" => "mrkdwn",
+                                   "text" => " merged by <#{sender_meta['html_url']}|#{sender_meta['login']}>"
+                              }
+                         ]
+                    }
+               ]
+          }
+          puts j.to_json
+          j.to_json
      end
 
      def notify_json(to_uri, json_payload)
-          Net::HTTP.post to_uri,
+          r = Net::HTTP.post to_uri,
                json_payload,
                "Content-Type" => "application/json"
+          puts r.body
      end
 end
 
@@ -46,30 +79,30 @@ post '/payload' do
 
      # PR action details
      action = body['action']
-     sender = body['sender']['login'] 
      
      # Get the PR details
      pr = body['pull_request']
-     repo = body['repository']['full_name']
-     number =  body['number']
-     title =   pr['title']
-     author =  pr['user']['login']
      merged =  pr['merged']
+
+     pr_link = pr['html_url']
+     repo_meta = body['repository']
+     author_meta = pr['user']
+     sender_meta = body['sender']
 
      # PR opened
      if action == 'opened'
           notify_json opened_uri,
-               make_json(repo, number, author, action, sender, "CR")
-          'PR opened'
+               make_merged_json(repo_meta, pr, author_meta, action, sender_meta)
      # PR merged
      elsif (action == 'closed') && merged
           action = "merged"
           notify_json merged_uri,
-               make_json(repo, number, author, action, sender, "shipit")
-          'PR merged'
+               make_merged_json(repo_meta, pr, author_meta, action, sender_meta)
      # PR closed without merging
      elsif (action == 'closed') && !merged
-          'PR closed without merging'
+          notify_json opened_uri,
+               make_merged_json(repo_meta, pr, author_meta, action, sender_meta)
      end
+     'Payload receieved'
 end
 
