@@ -1,0 +1,12 @@
+{
+   "port": <port number for service>,
+   "github": {
+      "secret": "<GitHub webhook secret>"
+   },
+   "slack": {
+      "webhooks": {
+         "opened": "<Slack hooks.slack.com target URI for opened pull requests>",
+         "merged": "<Slack hooks.slack.com target URI for merged pull requests>"
+      }
+   }
+}
