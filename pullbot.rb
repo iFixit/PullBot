@@ -62,10 +62,9 @@ helpers do
      end
 
      def notify_json(to_uri, json_payload)
-          r = Net::HTTP.post to_uri,
+          Net::HTTP.post to_uri,
                json_payload,
                "Content-Type" => "application/json"
-          puts r.body
      end
 end
 
