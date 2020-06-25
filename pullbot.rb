@@ -37,11 +37,6 @@ helpers do
                               "type" => "mrkdwn",
                               "text" => "<#{repo_meta['html_url']}|#{repo_meta['full_name']}>"\
                                         " <#{pr['html_url']}|#{pr['title']} ##{pr['number']}>"
-                         },
-                         "accessory" => {
-                              "type" => "image",
-                              "image_url" => "#{pr_icon_uri}",
-                              "alt_text" => "#{action}"
                          }
                     },
                     {
@@ -64,6 +59,11 @@ helpers do
                               {
                                    "type" => "mrkdwn",
                                    "text" => " merged by <#{sender_meta['html_url']}|#{sender_meta['login']}>"
+                              },
+                              {
+                                   "type" => "image",
+                                   "image_url" => "#{pr_icon_uri}",
+                                   "alt_text" => "#{action}"
                               }
                          ]
                     }
