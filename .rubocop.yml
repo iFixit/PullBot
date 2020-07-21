@@ -1,0 +1,8 @@
+Style/RedundantReturn:
+  Enabled: false
+
+Style/TrailingCommaInHashLiteral:
+  EnforcedStyleForMultiline: consistent_comma
+
+Layout/FirstHashElementIndentation:
+  EnforcedStyle: consistent
