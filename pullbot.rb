@@ -131,7 +131,6 @@ post '/payload' do
   pr = body['pull_request']
   merged = pr['merged']
 
-  pr_link = pr['html_url']
   repo_meta = body['repository']
   author_meta = pr['user']
   sender_meta = body['sender']
