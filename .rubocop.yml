@@ -6,3 +6,6 @@ Style/TrailingCommaInHashLiteral:
 
 Layout/FirstHashElementIndentation:
   EnforcedStyle: consistent
+
+Layout/ArgumentAlignment:
+  EnforcedStyle: with_fixed_indentation
