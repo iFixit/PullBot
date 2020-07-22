@@ -37,77 +37,77 @@ helpers do
 
   def make_json(repo_meta, pr, author_meta, action, sender_meta, pr_icon_uri, attachment, edge_color)
     j = {
-        'blocks' => [
-             {
-                  'type' => 'divider'
-             },
-             {
-                  'type' => 'context',
-                  'elements' => [
-                       {
-                            'type' => 'image',
-                            'image_url' => "#{pr_icon_uri}",
-                            'alt_text' => "#{action}"
-                       },
-                       {
-                            'type' => 'mrkdwn',
-                            'text' => "Pull request #{action}"
-                       }
-                  ]
-             },
-             {
-                  'type' => 'section',
-                  'text' => {
-                       'type' => 'mrkdwn',
-                       'text' => "*[<#{repo_meta['html_url']}|#{repo_meta['full_name']}>]*"\
-                                 " <#{pr['html_url']}|_#{pr['title']}_ *##{pr['number']}*>"
-                  }
-             },
-             {
-                  'type' => 'context',
-                  'elements' => [
-                       {
-                            'type' => 'image',
-                            'image_url' => author_meta['avatar_url'],
-                            'alt_text' => author_meta['login']
-                       },
-                       {
-                            'type' => 'mrkdwn',
-                            'text' => "by <#{author_meta['html_url']}|#{author_meta['login']}>"
-                       },
-                       {
-                            'type' => 'image',
-                            'image_url' => sender_meta['avatar_url'],
-                            'alt_text' => sender_meta['login']
-                       },
-                       {
-                            'type' => 'mrkdwn',
-                            'text' => " #{action} by <#{sender_meta['html_url']}|#{sender_meta['login']}>"
-                       }
-                  ]
-             },
-             {
-                  'type' => 'divider'
-             }
-        ]
-   }
-   if (attachment)
-     j['attachments'] = [
-          {
+      'blocks' => [
+        {
+          'type' => 'divider',
+        },
+        {
+          'type' => 'context',
+          'elements' => [
+            {
+              'type' => 'image',
+              'image_url' => "#{pr_icon_uri}",
+              'alt_text' => "#{action}",
+            },
+            {
+              'type' => 'mrkdwn',
+              'text' => "Pull request #{action}",
+            },
+          ],
+        },
+        {
+          'type' => 'section',
+          'text' => {
+            'type' => 'mrkdwn',
+            'text' => "*[<#{repo_meta['html_url']}|#{repo_meta['full_name']}>]*" \
+                      " <#{pr['html_url']}|_#{pr['title']}_ *##{pr['number']}*>",
+          },
+        },
+        {
+          'type' => 'context',
+          'elements' => [
+            {
+              'type' => 'image',
+              'image_url' => author_meta['avatar_url'],
+              'alt_text' => author_meta['login'],
+            },
+            {
+              'type' => 'mrkdwn',
+              'text' => "by <#{author_meta['html_url']}|#{author_meta['login']}>",
+            },
+            {
+              'type' => 'image',
+              'image_url' => sender_meta['avatar_url'],
+              'alt_text' => sender_meta['login'],
+            },
+            {
+              'type' => 'mrkdwn',
+              'text' => " #{action} by <#{sender_meta['html_url']}|#{sender_meta['login']}>",
+            },
+          ],
+        },
+        {
+          'type' => 'divider',
+        },
+      ],
+    }
+    if (attachment)
+      j['attachments'] = [
+        {
           'color' => "#{edge_color}",
           'blocks' => [
-                    {
-                         'type' => 'section',
-                         'text' => {
-                              'type' => 'mrkdwn',
-                              'text' => "#{pr['body']}"
-                         }
-                    }
-               ]
-          }
-     ]
-   end
-   j.to_json
+            {
+              'type' => 'section',
+              'text' => {
+                'type' => 'mrkdwn',
+                'text' => "#{pr['body']}",
+              },
+            },
+          ],
+        },
+      ]
+    end
+    j.to_json
   end
 
   def notify_json(to_uri, json_payload)
@@ -129,7 +129,7 @@ post '/payload' do
 
   # Get the PR details
   pr = body['pull_request']
-  merged =  pr['merged']
+  merged = pr['merged']
 
   pr_link = pr['html_url']
   repo_meta = body['repository']
@@ -146,21 +146,21 @@ post '/payload' do
     color = $edge_color_opened
     attachment = true
     response = 'Opened PR message receieved'
-  # PR re-opened
+    # PR re-opened
   elsif action == 'reopened'
     action = 'reopened'
     webhook_uri = $opened_uri
     icon_uri = $pr_icon_opened_uri
     color = $edge_color_opened
     response = 'Reopened PR message receieved'
-  # PR merged
+    # PR merged
   elsif (action == 'closed') && merged
     action = 'merged'
     webhook_uri = $merged_uri
     icon_uri = $pr_icon_merged_uri
     color = $edge_color_merged
     response = 'Merged PR message receieved'
-  # PR closed without merging
+    # PR closed without merging
   elsif (action == 'closed') && !merged
     action = 'closed without merge'
     webhook_uri = $closed_uri
@@ -172,4 +172,3 @@ post '/payload' do
     make_json(repo_meta, pr, author_meta, action, sender_meta, icon_uri, attachment, color)
   response
 end
-
