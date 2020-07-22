@@ -1,0 +1,94 @@
+Inspecting 2 files
+.C
+
+Offenses:
+
+pullbot.rb:13:1: C: Style/GlobalVars: Do not introduce global variables.
+$gh_secret = config['github']['secret']
+^^^^^^^^^^
+pullbot.rb:18:1: C: Style/GlobalVars: Do not introduce global variables.
+$closed_uri = URI(config['slack']['webhooks']['closed'])
+^^^^^^^^^^^
+pullbot.rb:19:1: C: Style/GlobalVars: Do not introduce global variables.
+$opened_uri = URI(config['slack']['webhooks']['opened'])
+^^^^^^^^^^^
+pullbot.rb:20:1: C: Style/GlobalVars: Do not introduce global variables.
+$merged_uri = URI(config['slack']['webhooks']['merged'])
+^^^^^^^^^^^
+pullbot.rb:23:1: C: Style/GlobalVars: Do not introduce global variables.
+$pr_icon_closed_uri = config['slack']['images']['closed']
+^^^^^^^^^^^^^^^^^^^
+pullbot.rb:24:1: C: Style/GlobalVars: Do not introduce global variables.
+$pr_icon_opened_uri = config['slack']['images']['opened']
+^^^^^^^^^^^^^^^^^^^
+pullbot.rb:25:1: C: Style/GlobalVars: Do not introduce global variables.
+$pr_icon_merged_uri = config['slack']['images']['merged']
+^^^^^^^^^^^^^^^^^^^
+pullbot.rb:28:1: C: Style/GlobalVars: Do not introduce global variables.
+$edge_color_opened = config['slack']['edge_colors']['opened']
+^^^^^^^^^^^^^^^^^^
+pullbot.rb:29:1: C: Style/GlobalVars: Do not introduce global variables.
+$edge_color_merged = config['slack']['edge_colors']['merged']
+^^^^^^^^^^^^^^^^^^
+pullbot.rb:30:1: C: Style/GlobalVars: Do not introduce global variables.
+$edge_color_closed = config['slack']['edge_colors']['closed']
+^^^^^^^^^^^^^^^^^^
+pullbot.rb:32:1: C: Metrics/BlockLength: Block has too many lines. [83/25]
+helpers do ...
+^^^^^^^^^^
+pullbot.rb:34:78: C: Style/GlobalVars: Do not introduce global variables.
+    signature = 'sha1=' + OpenSSL::HMAC.hexdigest(OpenSSL::Digest::SHA1.new, $gh_secret, payload_body)
+                                                                             ^^^^^^^^^^
+pullbot.rb:38:3: C: Metrics/AbcSize: Assignment Branch Condition size for make_json is too high. [<2, 15, 1> 15.17/15]
+  def make_json(repo_meta, pr, author_meta, action, sender_meta, pr_icon_uri, attachment, edge_color) ...
+  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+pullbot.rb:38:3: C: Metrics/MethodLength: Method has too many lines. [72/10]
+  def make_json(repo_meta, pr, author_meta, action, sender_meta, pr_icon_uri, attachment, edge_color) ...
+  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+pullbot.rb:38:16: C: Metrics/ParameterLists: Avoid parameter lists longer than 5 parameters. [8/5]
+  def make_json(repo_meta, pr, author_meta, action, sender_meta, pr_icon_uri, attachment, edge_color)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+pullbot.rb:38:28: C: Naming/MethodParameterName: Method parameter must be at least 3 characters long.
+  def make_json(repo_meta, pr, author_meta, action, sender_meta, pr_icon_uri, attachment, edge_color)
+                           ^^
+pullbot.rb:120:1: C: Metrics/BlockLength: Block has too many lines. [39/25]
+post '/payload' do ...
+^^^^^^^^^^^^^^^^^^
+pullbot.rb:143:19: C: Style/GlobalVars: Do not introduce global variables.
+    webhook_uri = $opened_uri
+                  ^^^^^^^^^^^
+pullbot.rb:144:16: C: Style/GlobalVars: Do not introduce global variables.
+    icon_uri = $pr_icon_opened_uri
+               ^^^^^^^^^^^^^^^^^^^
+pullbot.rb:145:13: C: Style/GlobalVars: Do not introduce global variables.
+    color = $edge_color_opened
+            ^^^^^^^^^^^^^^^^^^
+pullbot.rb:151:19: C: Style/GlobalVars: Do not introduce global variables.
+    webhook_uri = $opened_uri
+                  ^^^^^^^^^^^
+pullbot.rb:152:16: C: Style/GlobalVars: Do not introduce global variables.
+    icon_uri = $pr_icon_opened_uri
+               ^^^^^^^^^^^^^^^^^^^
+pullbot.rb:153:13: C: Style/GlobalVars: Do not introduce global variables.
+    color = $edge_color_opened
+            ^^^^^^^^^^^^^^^^^^
+pullbot.rb:158:19: C: Style/GlobalVars: Do not introduce global variables.
+    webhook_uri = $merged_uri
+                  ^^^^^^^^^^^
+pullbot.rb:159:16: C: Style/GlobalVars: Do not introduce global variables.
+    icon_uri = $pr_icon_merged_uri
+               ^^^^^^^^^^^^^^^^^^^
+pullbot.rb:160:13: C: Style/GlobalVars: Do not introduce global variables.
+    color = $edge_color_merged
+            ^^^^^^^^^^^^^^^^^^
+pullbot.rb:165:19: C: Style/GlobalVars: Do not introduce global variables.
+    webhook_uri = $closed_uri
+                  ^^^^^^^^^^^
+pullbot.rb:166:16: C: Style/GlobalVars: Do not introduce global variables.
+    icon_uri = $pr_icon_closed_uri
+               ^^^^^^^^^^^^^^^^^^^
+pullbot.rb:167:13: C: Style/GlobalVars: Do not introduce global variables.
+    color = $edge_color_clsoed
+            ^^^^^^^^^^^^^^^^^^
+
+2 files inspected, 29 offenses detected
