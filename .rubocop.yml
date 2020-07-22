@@ -4,6 +4,9 @@ Style/RedundantReturn:
 Style/TrailingCommaInHashLiteral:
   EnforcedStyleForMultiline: consistent_comma
 
+Style/TrailingCommaInArrayLiteral:
+  EnforcedStyleForMultiline: consistent_comma
+
 Layout/FirstHashElementIndentation:
   EnforcedStyle: consistent
 
