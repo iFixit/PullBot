@@ -136,6 +136,7 @@ post '/payload' do
 
      # Whether to show the PR description
      attachment = false
+     notify = true
 
      # PR opened
      if action == 'opened'
@@ -165,9 +166,15 @@ post '/payload' do
           icon_uri = $pr_icon_closed_uri
           color = $edge_color_clsoed
           response = 'Closed PR message receieved'
+     else
+          # Don't notify for other actions
+          notify = false
      end
-     notify_json webhook_uri,
-          make_json(repo_meta, pr, author_meta, action, sender_meta, icon_uri, attachment, color)
-     response
+
+     if notify
+          notify_json webhook_uri,
+               make_json(repo_meta, pr, author_meta, action, sender_meta, icon_uri, attachment, color)
+          response
+     end
 end
 
