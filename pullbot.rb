@@ -37,70 +37,70 @@ helpers do
 
      def make_json(repo_meta, pr, author_meta, action, sender_meta, pr_icon_uri, attachment, edge_color)
           j = {
-               "blocks" => [
+               'blocks' => [
                     {
-                         "type" => "divider"
+                         'type' => 'divider'
                     },
                     {
-                         "type" => "context",
-                         "elements" => [
+                         'type' => 'context',
+                         'elements' => [
                               {
-                                   "type" => "image",
-                                   "image_url" => "#{pr_icon_uri}",
-                                   "alt_text" => "#{action}"
+                                   'type' => 'image',
+                                   'image_url' => "#{pr_icon_uri}",
+                                   'alt_text' => "#{action}"
                               },
                               {
-                                   "type" => "mrkdwn",
-                                   "text" => "Pull request #{action}"
+                                   'type' => 'mrkdwn',
+                                   'text' => "Pull request #{action}"
                               }
                          ]
                     },
                     {
-                         "type" => "section",
-                         "text" => {
-                              "type" => "mrkdwn",
-                              "text" => "*[<#{repo_meta['html_url']}|#{repo_meta['full_name']}>]*"\
+                         'type' => 'section',
+                         'text' => {
+                              'type' => 'mrkdwn',
+                              'text' => "*[<#{repo_meta['html_url']}|#{repo_meta['full_name']}>]*"\
                                         " <#{pr['html_url']}|_#{pr['title']}_ *##{pr['number']}*>"
                          }
                     },
                     {
-                         "type" => "context",
-                         "elements" => [
+                         'type' => 'context',
+                         'elements' => [
                               {
-                                   "type" => "image",
-                                   "image_url" => author_meta['avatar_url'],
-                                   "alt_text" => author_meta['login']
+                                   'type' => 'image',
+                                   'image_url' => author_meta['avatar_url'],
+                                   'alt_text' => author_meta['login']
                               },
                               {
-                                   "type" => "mrkdwn",
-                                   "text" => "by <#{author_meta['html_url']}|#{author_meta['login']}>"
+                                   'type' => 'mrkdwn',
+                                   'text' => "by <#{author_meta['html_url']}|#{author_meta['login']}>"
                               },
                               {
-                                   "type" => "image",
-                                   "image_url" => sender_meta['avatar_url'],
-                                   "alt_text" => sender_meta['login']
+                                   'type' => 'image',
+                                   'image_url' => sender_meta['avatar_url'],
+                                   'alt_text' => sender_meta['login']
                               },
                               {
-                                   "type" => "mrkdwn",
-                                   "text" => " #{action} by <#{sender_meta['html_url']}|#{sender_meta['login']}>"
+                                   'type' => 'mrkdwn',
+                                   'text' => " #{action} by <#{sender_meta['html_url']}|#{sender_meta['login']}>"
                               }
                          ]
                     },
                     {
-                         "type" => "divider"
+                         'type' => 'divider'
                     }
                ]
           }
           if (attachment)
-               j["attachments"] = [
+               j['attachments'] = [
                     {
-                    "color" => "#{edge_color}",
-                    "blocks" => [
+                    'color' => "#{edge_color}",
+                    'blocks' => [
                               {
-                                   "type" => "section",
-                                   "text" => {
-                                        "type" => "mrkdwn",
-                                        "text" => "#{pr['body']}"
+                                   'type' => 'section',
+                                   'text' => {
+                                        'type' => 'mrkdwn',
+                                        'text' => "#{pr['body']}"
                                    }
                               }
                          ]
@@ -113,7 +113,7 @@ helpers do
      def notify_json(to_uri, json_payload)
           Net::HTTP.post to_uri,
                json_payload,
-               "Content-Type" => "application/json"
+               'Content-Type' => 'application/json'
      end
 end
 
@@ -155,14 +155,14 @@ post '/payload' do
           response = 'Reopened PR message receieved'
      # PR merged
      elsif (action == 'closed') && merged
-          action = "merged"
+          action = 'merged'
           webhook_uri = $merged_uri
           icon_uri = $pr_icon_merged_uri
           color = $edge_color_merged
           response = 'Merged PR message receieved'
      # PR closed without merging
      elsif (action == 'closed') && !merged
-          action = "closed without merge"
+          action = 'closed without merge'
           webhook_uri = $closed_uri
           icon_uri = $pr_icon_closed_uri
           color = $edge_color_clsoed
