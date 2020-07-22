@@ -46,8 +46,8 @@ helpers do
           'elements' => [
             {
               'type' => 'image',
-              'image_url' => "#{pr_icon_uri}",
-              'alt_text' => "#{action}",
+              'image_url' => pr_icon_uri,
+              'alt_text' => action,
             },
             {
               'type' => 'mrkdwn',
@@ -94,13 +94,13 @@ helpers do
     if (attachment)
       j['attachments'] = [
         {
-          'color' => "#{edge_color}",
+          'color' => edge_color,
           'blocks' => [
             {
               'type' => 'section',
               'text' => {
                 'type' => 'mrkdwn',
-                'text' => "#{pr['body']}",
+                'text' => pr['body'],
               },
             },
           ],
