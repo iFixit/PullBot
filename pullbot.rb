@@ -91,7 +91,7 @@ helpers do
         },
       ],
     }
-    if (attachment)
+    if attachment
       j['attachments'] = [
         {
           'color' => edge_color,
