@@ -58,7 +58,8 @@ helpers do
                          "text" => {
                               "type" => "mrkdwn",
                               "text" => "*[<#{repo_meta['html_url']}|#{repo_meta['full_name']}>]*"\
-                                        " <#{pr['html_url']}|_#{pr['title']}_ *##{pr['number']}*>"
+                                        " <#{pr['html_url']}|_#{pr['title'].gsub(/&/,'&amp;').gsub(/>/,'&gt;').gsub(/</,'&lt;')}_ "\
+                                        "*##{pr['number']}*>"
                          }
                     },
                     {
